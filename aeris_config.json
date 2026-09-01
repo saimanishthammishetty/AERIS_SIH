@@ -1,0 +1,19 @@
+{
+    "system_name": "AERIS Adaptive Noise Cancellation & AI Telemetry",
+    "version": "2.4.0",
+    "serial_port": "COM3",
+    "baud_rate": 115200,
+    "sample_rate": 16000,
+    "frame_size": 512,
+    "lms_filter_order": 16,
+    "lms_step_size": 0.005,
+    "nlms_filter_order": 32,
+    "nlms_step_size": 0.150,
+    "nlms_epsilon": 1e-8,
+    "anc_enabled": true,
+    "ai_enabled": true,
+    "stability_threshold": 5.0,
+    "max_weight_norm": 10.0,
+    "default_anc_algorithm": "LMS",
+    "hardware_mode": "SIMULATION_FALLBACK"
+}

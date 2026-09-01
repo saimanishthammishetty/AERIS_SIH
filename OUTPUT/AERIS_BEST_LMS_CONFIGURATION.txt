@@ -1,0 +1,8 @@
+AERIS BEST LMS CONFIGURATION
+============================
+
+Filter Order : 16
+Step Size    : 0.0100
+Average SNR Improvement : 14.72 dB
+Minimum SNR Improvement : 7.60 dB
+Maximum SNR Improvement : 22.89 dB

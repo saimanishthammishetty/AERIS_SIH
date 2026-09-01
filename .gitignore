@@ -1,0 +1,29 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Logs
+logs/*.log
+*.log
+
+# Environments
+.env
+.venv
+env/
+venv/
+ENV/
+
+# IDE files
+.vscode/
+.idea/
+
+# Large export archives
+AERIS_SIH_EXPORT.zip
+*.zip
+*.tar.gz
+
+# Node / Frontend build artifacts (if any)
+node_modules/
+dist/
+build/

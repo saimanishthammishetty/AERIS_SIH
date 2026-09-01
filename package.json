@@ -1,0 +1,22 @@
+{
+  "name": "aeris-v2.5",
+  "version": "2.5.0",
+  "description": "AERIS — Adaptive Noise Cancellation & Intelligent Communication System",
+  "main": "FRONTEND/app.js",
+  "scripts": {
+    "dev": "python -m uvicorn backend.main:app --host 127.0.0.1 --port 8000 --reload",
+    "start": "python -m uvicorn backend.main:app --host 127.0.0.1 --port 8000",
+    "test": "python tests/test_aeris_complete.py",
+    "verify": "python tests/verify_all.py"
+  },
+  "keywords": [
+    "dsp",
+    "anc",
+    "adaptive-filter",
+    "random-forest",
+    "fastapi",
+    "audio-worklet"
+  ],
+  "author": "AERIS Development Team",
+  "license": "MIT"
+}

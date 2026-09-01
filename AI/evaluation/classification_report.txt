@@ -1,0 +1,24 @@
+=============================================================================
+AERIS AI NOISE CLASSIFIER - OFFICIAL EVALUATION REPORT
+Model: RandomForestClassifier (100 Trees, Max Depth 12)
+Accuracy  : 99.6903%
+Precision : 99.9437%
+Recall    : 99.6903%
+F1-Score  : 99.8157%
+5-Fold CV : 99.14% (+/- 0.15%)
+Samples   : 9,270 frames (5,718 train, 3,552 test)
+Features  : 28 acoustic features
+Classes   : ['NOISE_TMETRO', 'CLEAN_SPEECH', 'ANC_ENHANCED', 'NOISY_SPEECH']
+=============================================================================
+DETAILED CLASSIFICATION REPORT:
+              precision    recall  f1-score   support
+
+ANC_ENHANCED     0.0000    0.0000    0.0000         0
+CLEAN_SPEECH     1.0000    0.9838    0.9918       678
+NOISE_TMETRO     0.9993    1.0000    0.9997      2874
+
+    accuracy                         0.9969      3552
+   macro avg     0.6664    0.6613    0.6638      3552
+weighted avg     0.9994    0.9969    0.9982      3552
+
+=============================================================================

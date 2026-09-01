@@ -1,0 +1,17 @@
+=============================================================================
+AERIS AI NOISE CLASSIFIER - AUDIT STATUS REPORT
+=============================================================================
+Status: MULTI-CLASS TRAINING PAUSED (SINGLE NOISE CLASS DETECTED)
+Discovered Classes: ['TMETRO']
+Total Valid Frames: 38,384
+Features Count    : 26
+
+Reason:
+Supervised multi-class noise classification requires at least 2 distinct noise classes.
+The dataset currently contains 1 class ('TMETRO') with 38,384 frames across 16 audio files.
+
+Required Action for Multi-Class Noise Recognition:
+Place additional noise category folders inside DATASET/NOISE/ and re-run:
+1. python AERIS_BUILD_AI_DATASET.py
+2. python AERIS_AI_TRAIN.py
+=============================================================================

@@ -1,0 +1,11 @@
+AERIS NLMS ADAPTIVE NOISE CANCELLATION RESULTS
+===============================================
+
+Sampling Rate       : 16000 Hz
+Filter Order        : 32
+Step Size           : 0.8000
+Input SNR           : -10.0000 dB
+Output SNR          : -0.2224 dB
+SNR Improvement     : 9.7777 dB
+Input MSE           : 0.0119724584
+Output MSE          : 0.0012601375

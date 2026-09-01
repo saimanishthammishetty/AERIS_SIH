@@ -1,0 +1,71 @@
+=============================================================================
+AERIS AI NOISE CLASSIFIER - OFFICIAL MODEL AUDIT & PERFORMANCE REPORT
+Generated: 2026-08-30 17:27:19
+=============================================================================
+
+1. DATASET & SPLIT SPECIFICATIONS:
+-----------------------------------------------------------------------------
+Dataset Size          : 9,270 samples (28 features)
+Discovered Classes    : ['NOISE_TMETRO', 'CLEAN_SPEECH', 'ANC_ENHANCED', 'NOISY_SPEECH']
+Class Distribution    : {'NOISE_TMETRO': 7664, 'CLEAN_SPEECH': 1471, 'ANC_ENHANCED': 90, 'NOISY_SPEECH': 45}
+Training Samples      : 5,977 frames
+Held-Out Test Samples : 3,293 frames
+Cross-Validation      : 5-Fold Stratified CV Accuracy: 99.13% (+/- 0.24%)
+Zero-Leakage Protocol : GroupShuffleSplit by recording file
+
+2. ACTUAL MEASURED PERFORMANCE METRICS:
+-----------------------------------------------------------------------------
+Accuracy  : 99.7874%
+Precision : 100.0000%
+Recall    : 99.7874%
+F1-Score  : 99.8928%
+
+DETAILED CLASSIFICATION MATRIX:
+-----------------------------------------------------------------------------
+              precision    recall  f1-score   support
+
+ANC_ENHANCED     0.0000    0.0000    0.0000         0
+CLEAN_SPEECH     1.0000    0.9833    0.9916       419
+NOISE_TMETRO     1.0000    1.0000    1.0000      2874
+
+    accuracy                         0.9979      3293
+   macro avg     0.6667    0.6611    0.6639      3293
+weighted avg     1.0000    0.9979    0.9989      3293
+
+-----------------------------------------------------------------------------
+
+FEATURE IMPORTANCE RANKING:
+-----------------------------------------------------------------------------
+ 1. DominantFrequency       : 0.1554 (15.54%)
+ 2. PeakAmplitude           : 0.1380 (13.80%)
+ 3. MFCC_1                  : 0.1099 (10.99%)
+ 4. MFCC_3                  : 0.1014 (10.14%)
+ 5. SpectralCentroid        : 0.0529 (5.29%)
+ 6. Kurtosis                : 0.0485 (4.85%)
+ 7. SpectralBandwidth       : 0.0476 (4.76%)
+ 8. ZeroCrossingRate        : 0.0374 (3.74%)
+ 9. SpectralFlux            : 0.0370 (3.70%)
+10. CrestFactor             : 0.0318 (3.18%)
+11. StdDev                  : 0.0272 (2.72%)
+12. Variance                : 0.0252 (2.52%)
+13. SpectralRolloff         : 0.0237 (2.37%)
+14. MFCC_2                  : 0.0233 (2.33%)
+15. RMS                     : 0.0211 (2.11%)
+16. SpectralFlatness        : 0.0186 (1.86%)
+17. SpectralEnergy          : 0.0177 (1.77%)
+18. MeanAbs                 : 0.0168 (1.68%)
+19. MFCC_5                  : 0.0142 (1.42%)
+20. MFCC_4                  : 0.0101 (1.01%)
+21. MFCC_6                  : 0.0098 (0.98%)
+22. MFCC_7                  : 0.0089 (0.89%)
+23. MFCC_13                 : 0.0057 (0.57%)
+24. MFCC_12                 : 0.0046 (0.46%)
+25. MFCC_10                 : 0.0039 (0.39%)
+26. MFCC_9                  : 0.0037 (0.37%)
+27. MFCC_8                  : 0.0029 (0.29%)
+28. MFCC_11                 : 0.0024 (0.24%)
+
+LIMITATIONS & OPERATIONAL BOUNDS:
+- Trained on 16 kHz acoustic segments (250 ms analysis window).
+- For signals below confidence threshold (0.50), system falls back to 'LOW_CONFIDENCE'.
+=============================================================================

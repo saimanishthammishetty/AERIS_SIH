@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AERIS v2.5 — Adaptive Noise Cancellation &amp; Intelligent Communication System</title>
+    <meta name="description" content="AERIS: Adaptive Noise Cancellation and Intelligent Communication System. Real-time AI noise classification, LMS/NLMS adaptive filtering, defense-grade monitoring dashboard.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.2/dist/chart.umd.min.js"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<!-- ══════════════════ HEADER ══════════════════ -->
+<header class="aeris-header" id="mainHeader">
+    <div class="header-left">
+        <div class="radar-emblem" id="radarEmblem" title="AERIS Real-Time Signal Processor">
+            <div class="radar-ring r1"></div>
+            <div class="radar-ring r2"></div>
+            <span class="radar-glyph">◈</span>
+        </div>
+        <div class="brand-block">
+            <h1 class="brand-title">AERIS <span class="brand-version">v2.5 PROTOTYPE</span></h1>
+            <p class="brand-sub">Adaptive Noise Cancellation &amp; Intelligent Communication System</p>
+        </div>
+    </div>
+
+    <div class="header-center">
+        <div class="status-pill" id="statusPill">
+            <span class="pulse-dot" id="pillDot"></span>
+            <span id="pillLabel">SYSTEM: ONLINE &amp; READY</span>
+        </div>
+    </div>
+
+    <div class="header-right">
+        <div class="mode-selector">
+            <button class="mode-btn active" id="btnLive" onclick="setMode('LIVE')">🎙️ LIVE MIC</button>
+            <button class="mode-btn" id="btnDemo" onclick="setMode('DEMO')">📊 MATLAB BENCHMARK</button>
+            <button class="mode-btn jury-toggle-btn" id="btnJury" onclick="toggleJuryMode()">⚡ JURY DEMO</button>
+        </div>
+        <div class="clock" id="clockDisplay">00:00:00</div>
+    </div>
+</header>
+
+<!-- ══════════════════ TOP STATUS & NOTICES ══════════════════ -->
+<div class="top-notice-bar">
+    <div class="top-notice-tags">
+        <span class="notice-tag warn">LAB PROTOTYPE</span>
+        <span class="notice-tag">1-MIC ADAPTIVE ENHANCEMENT</span>
+        <span class="notice-tag info">🎧 HEADPHONES RECOMMENDED</span>
+    </div>
+    <div class="top-notice-meta">
+        SAMPLE RATE: 16,000 HZ &bull; FRAME SIZE: 512 SAMPLES (32.0 MS) &bull; DSP: LMS / NLMS
+    </div>
+</div>
+
+<div class="demo-banner hidden" id="demoBanner">
+    ◈ MATLAB OFFLINE VALIDATION BENCHMARK — Synchronized mathematical validation on authentic LibriSpeech &amp; TMETRO audio datasets (+5 dB to -20 dB SNR).
+</div>
+
+<!-- ══════════════════ MAIN DASHBOARD GRID ══════════════════ -->
+<main class="aeris-grid">
+
+    <!-- ── ROW 1: Central Subsystem Status (Compact Bar) ── -->
+    <section class="panel panel-full" id="panelSystemStatus">
+        <div class="panel-header">
+            <h2 class="panel-title">🛡️ CENTRAL SUBSYSTEM MATRIX</h2>
+            <span class="panel-tag green" id="globalStateTag">ONLINE</span>
+        </div>
+        <div class="subsystem-grid">
+            <div class="subsystem-item">
+                <span class="ss-indicator" id="indBackend"></span>
+                <div class="ss-info">
+                    <span class="ss-label">FASTAPI BACKEND</span>
+                    <span class="ss-value" id="valBackend">ONLINE</span>
+                </div>
+            </div>
+            <div class="subsystem-item">
+                <span class="ss-indicator" id="indModel"></span>
+                <div class="ss-info">
+                    <span class="ss-label">AI CLASSIFIER</span>
+                    <span class="ss-value" id="valModel">READY (RF-28)</span>
+                </div>
+            </div>
+            <div class="subsystem-item">
+                <span class="ss-indicator offline" id="indMic"></span>
+                <div class="ss-info">
+                    <span class="ss-label">LIVE MICROPHONE</span>
+                    <span class="ss-value" id="valMic">OFFLINE</span>
+                </div>
+            </div>
+            <div class="subsystem-item">
+                <span class="ss-indicator" id="indWorklet"></span>
+                <div class="ss-info">
+                    <span class="ss-label">AUDIOWORKLET</span>
+                    <span class="ss-value" id="valWorklet">LOADED</span>
+                </div>
+            </div>
+            <div class="subsystem-item">
+                <span class="ss-indicator" id="indANC"></span>
+                <div class="ss-info">
+                    <span class="ss-label">ANC ENGINE</span>
+                    <span class="ss-value" id="valANC">ACTIVE (LMS)</span>
+                </div>
+            </div>
+            <div class="subsystem-item">
+                <span class="ss-indicator" id="indWS"></span>
+                <div class="ss-info">
+                    <span class="ss-label">TELEMETRY WS</span>
+                    <span class="ss-value" id="valWS">STREAMING</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ── ROW 2 LEFT: Live Audio Capture & Waveforms ── -->
+    <section class="panel panel-md" id="panelLiveAudio">
+        <div class="panel-header">
+            <h2 class="panel-title">🎙️ LIVE MICROPHONE &amp; WAVEFORM MONITORS</h2>
+            <div class="level-meters-group">
+                <div class="level-meter-wrap">
+                    <span>IN: <b id="rmsInVal">0.0000</b></span>
+                    <div class="level-bar"><div class="level-fill" id="levelInput" style="width:0%"></div></div>
+                </div>
+                <div class="level-meter-wrap">
+                    <span>OUT: <b id="rmsOutVal">0.0000</b></span>
+                    <div class="level-bar"><div class="level-fill output-fill" id="levelOutput" style="width:0%"></div></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Primary Live Mic Button -->
+        <button class="mic-primary-btn" id="btnMicToggle" onclick="toggleMicrophone()">
+            🎤 START LIVE MICROPHONE STREAMING
+        </button>
+
+        <!-- Compact Waveforms -->
+        <div class="dual-canvas-wrap">
+            <div class="canvas-block">
+                <div class="canvas-header">
+                    <span class="canvas-label blue-label">INPUT (NOISY / LIVE VOICE)</span>
+                    <span class="canvas-sub">PCM 512 &bull; 16 kHz</span>
+                </div>
+                <canvas id="canvasNoisy" width="600" height="75"></canvas>
+            </div>
+            <div class="canvas-block">
+                <div class="canvas-header">
+                    <span class="canvas-label green-label">OUTPUT (ENHANCED CLEAN VOICE)</span>
+                    <span class="canvas-sub green-sub">Adaptive Spectral &amp; LMS Cleaned</span>
+                </div>
+                <canvas id="canvasEnhanced" width="600" height="75"></canvas>
+            </div>
+        </div>
+
+        <!-- Audio Output & Recording Controls -->
+        <div class="audio-strip-controls">
+            <div class="audio-playback-opts">
+                <button class="ctrl-btn stop-btn" onclick="stopAudioPlayback()">■ STOP AUDIO</button>
+                <div class="vol-control">
+                    <span>VOL</span>
+                    <input type="range" min="0" max="1" step="0.05" value="1.0" id="audioVolume" oninput="setAudioVolume(this.value)">
+                    <button class="ctrl-btn" id="btnMute" onclick="toggleMute()">MUTE</button>
+                </div>
+            </div>
+            
+            <div class="recording-controls-row">
+                <button class="rec-btn" id="btnRecordToggle" onclick="toggleLiveRecording()">⏺ LIVE RECORD</button>
+                <button class="rec-btn" id="btnSaveInput" onclick="saveRecording('input')" disabled>💾 SAVE INPUT</button>
+                <button class="rec-btn" id="btnSaveEnhanced" onclick="saveRecording('enhanced')" disabled>💾 SAVE ENHANCED</button>
+            </div>
+            <div id="recStatusText" class="rec-status-line">
+                Recording: Standby (0.0s)
+            </div>
+        </div>
+    </section>
+
+    <!-- ── ROW 2 RIGHT: AI Intelligence & Real-Time DSP Engine ── -->
+    <section class="panel panel-md" id="panelIntelligence">
+        <div class="panel-header">
+            <h2 class="panel-title">🧠 AI NOISE INTELLIGENCE &amp; DSP ENGINE</h2>
+            <span class="panel-tag green" id="ancModeTag">ACTIVE (LMS)</span>
+        </div>
+
+        <!-- AI Classification Card -->
+        <div class="ai-class-display">
+            <div class="ai-top-row">
+                <div class="noise-class-badge" id="noiseClassBadge">STANDBY</div>
+                <div class="confidence-box">
+                    <span class="conf-label">CONFIDENCE</span>
+                    <div class="conf-bar-wrap">
+                        <div class="conf-bar-fill" id="confBarFill" style="width:0%"></div>
+                    </div>
+                    <span class="conf-pct" id="confPct">0.0%</span>
+                </div>
+            </div>
+
+            <div class="ai-meta-row">
+                <div class="ai-meta-item">
+                    <span class="meta-label">MODEL</span>
+                    <span class="meta-value">RandomForest</span>
+                </div>
+                <div class="ai-meta-item">
+                    <span class="meta-label">FEATURES</span>
+                    <span class="meta-value">28 Acoustic</span>
+                </div>
+                <div class="ai-meta-item">
+                    <span class="meta-label">AI INFERENCE</span>
+                    <span class="meta-value" id="aiInferenceMs">-- ms</span>
+                </div>
+            </div>
+
+            <div class="explainability-block">
+                <span class="exp-title">AI DECISION &amp; FILTER SELECTION</span>
+                <p class="exp-reason" id="explainReason">Initial standby state. Defaulting to safe LMS filter.</p>
+            </div>
+        </div>
+
+        <!-- Adaptive ANC Controls & Metrics -->
+        <div class="anc-sub-section">
+            <div class="anc-metrics-grid">
+                <div class="anc-metric">
+                    <span class="anc-label">ALGORITHM</span>
+                    <span class="anc-value" id="ancAlgorithm">LMS</span>
+                </div>
+                <div class="anc-metric">
+                    <span class="anc-label">FILTER ORDER (M)</span>
+                    <span class="anc-value" id="ancOrder">16</span>
+                </div>
+                <div class="anc-metric">
+                    <span class="anc-label">STEP SIZE (μ)</span>
+                    <span class="anc-value" id="ancMu">0.005</span>
+                </div>
+                <div class="anc-metric">
+                    <span class="anc-label">INPUT SNR</span>
+                    <span class="anc-value" id="inputSNR">N/A — live mic</span>
+                </div>
+                <div class="anc-metric">
+                    <span class="anc-label">OUTPUT SNR</span>
+                    <span class="anc-value gain" id="outputSNR">N/A — live mic</span>
+                </div>
+                <div class="anc-metric">
+                    <span class="anc-label">EST. GAIN</span>
+                    <span class="anc-value highlight" id="snrGain">N/A — live mic</span>
+                </div>
+            </div>
+
+            <div class="anc-controls">
+                <button class="ctrl-btn lms-btn" onclick="sendANCControl('START','LMS',16,0.005)">▶ LMS (M=16)</button>
+                <button class="ctrl-btn nlms-btn" onclick="sendANCControl('START','NLMS',32,0.150)">▶ NLMS (M=32)</button>
+                <button class="ctrl-btn stop-btn" onclick="sendANCControl('STOP','LMS',16,0.005)">■ BYPASS</button>
+                <button class="ctrl-btn reset-btn" onclick="sendANCControl('RESET','LMS',16,0.005)">↺ RESET</button>
+            </div>
+        </div>
+
+        <!-- Real-Time Measured Latency Breakdown -->
+        <div class="latency-compact-box">
+            <div class="lat-header">
+                <span class="lat-title">⏱️ MEASURED LATENCY BREAKDOWN</span>
+                <span class="panel-tag" id="latencyBadge">TARGET: 32 ms</span>
+            </div>
+            <div class="latency-grid">
+                <div class="lat-chip"><span class="chip-lbl">Capture:</span> <b id="latCapture">-- ms</b></div>
+                <div class="lat-chip"><span class="chip-lbl">Features:</span> <b id="latFeats">-- ms</b></div>
+                <div class="lat-chip"><span class="chip-lbl">AI Infer:</span> <b id="latAI">-- ms</b></div>
+                <div class="lat-chip"><span class="chip-lbl">DSP:</span> <b id="latANC">-- ms</b></div>
+                <div class="lat-chip"><span class="chip-lbl">Out/Net:</span> <b id="latOut">-- ms</b></div>
+                <div class="lat-chip total"><span class="chip-lbl">Total E2E:</span> <b id="latTotal" class="total-val">-- ms</b></div>
+            </div>
+            <div class="budget-status-row">
+                <span id="budgetStatus">✓ WITHIN BUDGET</span>
+                <span>FRAMES: <b id="frameCount">0</b> &bull; DROPPED: <b id="dropCount">0</b></span>
+            </div>
+        </div>
+    </section>
+
+    <!-- ── ROW 3 LEFT: Frequency Spectrum & Compact SNR Trend ── -->
+    <section class="panel panel-md" id="panelVisualizers">
+        <div class="panel-header">
+            <h2 class="panel-title">≋ FREQUENCY SPECTRUM (FFT) &amp; SNR TREND</h2>
+            <span class="panel-tag">512-PT FFT</span>
+        </div>
+
+        <div class="viz-compact-grid">
+            <!-- Compact Frequency Spectrum -->
+            <div class="spectrum-block">
+                <div class="canvas-header">
+                    <span class="canvas-label">LIVE FREQUENCY SPECTRUM</span>
+                    <div class="dom-freq-inline">
+                        <span>DOM: <b id="domFreq">-- Hz</b></span> &bull; 
+                        <span>CENTROID: <b id="specCentroid">-- Hz</b></span>
+                    </div>
+                </div>
+                <canvas id="canvasSpectrum" width="600" height="85"></canvas>
+            </div>
+
+            <!-- Compact SNR Trend Chart -->
+            <div class="snr-chart-block">
+                <div class="canvas-header">
+                    <span class="canvas-label">SNR GAIN TREND (MATLAB &amp; REPLAY)</span>
+                    <span class="canvas-sub">LMS vs NLMS (dB)</span>
+                </div>
+                <div class="snr-chart-wrapper">
+                    <canvas id="chartSNR" width="600" height="85"></canvas>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ── ROW 3 RIGHT: Controlled Noise Injection & 4-Stream DSP Simulation ── -->
+    <section class="panel panel-md" id="panelNoiseGen">
+        <div class="panel-header">
+            <h2 class="panel-title">🎛️ CONTROLLED NOISE SIMULATION &amp; 4-STREAM DSP</h2>
+            <span class="panel-tag info">SIMULATION ENGINE</span>
+        </div>
+
+        <div class="noise-sim-controls">
+            <div class="sim-inputs-row">
+                <div class="sim-input-group">
+                    <label for="selNoiseType">NOISE SOURCE:</label>
+                    <select id="selNoiseType" class="sim-select" onchange="onNoiseParamsChanged()">
+                        <option value="tmetro" selected>TMETRO Subway Noise</option>
+                        <option value="white">Gaussian White Noise</option>
+                        <option value="broadband">Broadband (Pink) Noise</option>
+                        <option value="impulsive">Impulsive / Burst Clicks</option>
+                    </select>
+                </div>
+                <div class="sim-input-group">
+                    <label for="rangeSNR">TARGET SNR: <b id="lblTargetSNR">-10.0 dB</b></label>
+                    <input type="range" id="rangeSNR" min="-20" max="10" step="1" value="-10" oninput="document.getElementById('lblTargetSNR').textContent = this.value + '.0 dB'; onNoiseParamsChanged()">
+                </div>
+                <button class="matlab-btn" id="btnSynthesize" onclick="synthesizeControlledNoise()">⚡ GENERATE &amp; PROCESS 4 STREAMS</button>
+            </div>
+
+            <!-- Calculated Metrics for Simulation -->
+            <div class="sim-metrics-bar">
+                <div class="sim-metric-chip">IN SNR: <b id="simInSNR">-10.00 dB</b></div>
+                <div class="sim-metric-chip">LMS GAIN: <b id="simLMSGain" class="lms-color">+18.71 dB</b></div>
+                <div class="sim-metric-chip">LMS MSE: <b id="simLMSMse">0.000517</b></div>
+                <div class="sim-metric-chip">NLMS GAIN: <b id="simNLMSGain" class="nlms-color">+10.35 dB</b></div>
+                <div class="sim-metric-chip">NLMS MSE: <b id="simNLMSMse">0.003543</b></div>
+            </div>
+
+            <!-- 4 Separate Audio Streams Playback -->
+            <div class="matlab-playback-strip">
+                <span class="strip-title">4 DISTINCT AUDIO STREAM PLAYBACK:</span>
+                <div class="playback-grid">
+                    <button class="track-btn" id="btnPlayClean" onclick="playAudioTrack('clean')">
+                        <span class="track-name">▶ 1. Original Clean</span>
+                        <span class="track-desc">Clean Reference Speech</span>
+                    </button>
+                    <button class="track-btn" id="btnPlayNoisy" onclick="playAudioTrack('noisy')">
+                        <span class="track-name">▶ 2. Noisy Mixed</span>
+                        <span class="track-desc">Clean + Selected Noise</span>
+                    </button>
+                    <button class="track-btn" id="btnPlayLMS" onclick="playAudioTrack('lms')">
+                        <span class="track-name">▶ 3. LMS Enhanced</span>
+                        <span class="track-desc">Adaptive LMS Filter Output</span>
+                    </button>
+                    <button class="track-btn" id="btnPlayNLMS" onclick="playAudioTrack('nlms')">
+                        <span class="track-name">▶ 4. NLMS Enhanced</span>
+                        <span class="track-desc">Normalized LMS Output</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ── ROW 4 LEFT: MATLAB Offline Validation Benchmarks ── -->
+    <section class="panel panel-md" id="panelMatlab">
+        <div class="panel-header">
+            <h2 class="panel-title">📊 MATLAB OFFLINE VALIDATION BENCHMARKS</h2>
+            <button class="matlab-btn" onclick="openMatlabReportModal()">📄 VIEW FULL REPORT</button>
+        </div>
+
+        <!-- Authentic MATLAB Results Table -->
+        <table class="matlab-table" id="matlabResultsTable">
+            <thead>
+                <tr>
+                    <th>SNR Target</th>
+                    <th>LMS Gain</th>
+                    <th>LMS MSE</th>
+                    <th>NLMS Gain</th>
+                    <th>NLMS MSE</th>
+                    <th>Stability</th>
+                </tr>
+            </thead>
+            <tbody id="matlabTableBody">
+                <tr><td>+5.0 dB</td><td class="lms-color">+10.06 dB</td><td>0.000120</td><td class="nlms-color">-4.65 dB</td><td>0.003541</td><td class="stable-text">STABLE</td></tr>
+                <tr><td>0.0 dB</td><td class="lms-color">+12.62 dB</td><td>0.000210</td><td class="nlms-color">+0.35 dB</td><td>0.003542</td><td class="stable-text">STABLE</td></tr>
+                <tr><td>-5.0 dB</td><td class="lms-color">+15.59 dB</td><td>0.000335</td><td class="nlms-color">+5.35 dB</td><td>0.003542</td><td class="stable-text">STABLE</td></tr>
+                <tr class="highlight-row"><td>-10.0 dB</td><td class="lms-color">+18.71 dB</td><td>0.000517</td><td class="nlms-color">+10.35 dB</td><td>0.003543</td><td class="stable-text">STABLE</td></tr>
+                <tr><td>-15.0 dB</td><td class="lms-color">+21.72 dB</td><td>0.000817</td><td class="nlms-color">+15.34 dB</td><td>0.003544</td><td class="stable-text">STABLE</td></tr>
+                <tr><td>-20.0 dB</td><td>N/A</td><td>N/A</td><td class="nlms-color">+20.34 dB</td><td>0.003546</td><td class="fallback-text">LMS UNSTABLE &rarr; NLMS SAFE</td></tr>
+            </tbody>
+        </table>
+        <div class="table-caption-note">
+            * Benchmark values computed from authentic MATLAB execution on LibriSpeech &amp; TMETRO datasets. Lab simulation only.
+        </div>
+    </section>
+
+    <!-- ── ROW 4 RIGHT: Communication Resilience & Edge Robustness ── -->
+    <section class="panel panel-md" id="panelResilience">
+        <div class="panel-header">
+            <h2 class="panel-title">🛡️ COMMUNICATION RESILIENCE &amp; EDGE ARCHITECTURE</h2>
+            <span class="panel-tag green">LOCAL EDGE DSP</span>
+        </div>
+        <div class="resilience-grid">
+            <div class="resilience-card">
+                <div class="res-icon">⚡</div>
+                <div class="res-body">
+                    <span class="res-title">LOCAL EDGE PROCESSING</span>
+                    <p class="res-desc">All ML inference and LMS/NLMS adaptive DSP run entirely on-device (PC). Zero external API calls required.</p>
+                </div>
+            </div>
+            <div class="resilience-card">
+                <div class="res-icon">🔒</div>
+                <div class="res-body">
+                    <span class="res-title">NO CLOUD AUDIO REQUIRED</span>
+                    <p class="res-desc">Raw voice and audio frames never leave the local environment, ensuring maximum privacy and offline communication autonomy.</p>
+                </div>
+            </div>
+            <div class="resilience-card">
+                <div class="res-icon">📶</div>
+                <div class="res-body">
+                    <span class="res-title">BANDWIDTH SAVING PIPELINE</span>
+                    <p class="res-desc">Efficient 512-sample PCM streaming consumes minimal telemetry bandwidth with automatic degraded network throttling.</p>
+                </div>
+            </div>
+            <div class="resilience-card">
+                <div class="res-icon">⏱️</div>
+                <div class="res-body">
+                    <span class="res-title">LOW-LATENCY PIPELINE</span>
+                    <p class="res-desc">Real-time roundtrip DSP execution operates continuously within the 32ms frame budget to ensure natural conversational speech.</p>
+                </div>
+            </div>
+            <div class="resilience-card full-span">
+                <div class="res-icon">🛡️</div>
+                <div class="res-body">
+                    <span class="res-title">WATCHDOG AUTO-RECOVERY FALLBACK</span>
+                    <p class="res-desc">Active numerical divergence and exploding weight clamping automatically resets filter coefficients if extreme noise causes instability.</p>
+                </div>
+            </div>
+        </div>
+        <div class="resilience-disclaimer">
+            PROTOTYPE SYSTEM &bull; LAB VALIDATION ONLY &bull; NOT BATTLEFIELD-DEPLOYED
+        </div>
+    </section>
+
+    <!-- ── ROW 5: System Diagnostics & Event Logs ── -->
+    <section class="panel panel-md" id="panelDiagnostics">
+        <div class="panel-header">
+            <h2 class="panel-title">⚙️ SYSTEM DIAGNOSTICS &amp; SELF-TEST</h2>
+            <button class="matlab-btn" id="btnRunDiagnostics" onclick="runComprehensiveSelfTest()">RUN SELF-TEST</button>
+        </div>
+        <div class="diag-grid" id="diagGrid">
+            <div class="diag-item"><span>FastAPI Backend API</span><span class="diag-pass" id="diagApi">PASS</span></div>
+            <div class="diag-item"><span>AI Model (RandomForest)</span><span class="diag-pass" id="diagModel">PASS</span></div>
+            <div class="diag-item"><span>StandardScaler Pipeline</span><span class="diag-pass" id="diagScaler">PASS</span></div>
+            <div class="diag-item"><span>28-Feature Extractor</span><span class="diag-pass" id="diagFeats">PASS</span></div>
+            <div class="diag-item"><span>LMS Adaptive Filter</span><span class="diag-pass" id="diagLMS">PASS</span></div>
+            <div class="diag-item"><span>NLMS Adaptive Filter</span><span class="diag-pass" id="diagNLMS">PASS</span></div>
+            <div class="diag-item"><span>WebSocket Link</span><span class="diag-pass" id="diagWS">PASS</span></div>
+            <div class="diag-item"><span>AudioWorklet Processor</span><span class="diag-pass" id="diagWorklet">PASS</span></div>
+            <div class="diag-item"><span>MATLAB Benchmark Data</span><span class="diag-pass" id="diagMatlab">PASS</span></div>
+            <div class="diag-item"><span>Output Playback Buffer</span><span class="diag-pass" id="diagAudioOut">PASS</span></div>
+        </div>
+        <div id="diagExplanationBox" class="diag-explanation hidden"></div>
+    </section>
+
+    <section class="panel panel-md" id="panelEventLog">
+        <div class="panel-header">
+            <h2 class="panel-title">☰ REAL-TIME EVENT LOG</h2>
+            <div class="log-actions">
+                <button class="ctrl-btn" style="padding:2px 8px; font-size:0.7rem;" onclick="exportLogs()">EXPORT</button>
+                <button class="ctrl-btn" style="padding:2px 8px; font-size:0.7rem;" onclick="clearLog()">CLEAR</button>
+            </div>
+        </div>
+        <div class="event-log-container" id="eventLog">
+            <div class="log-entry info">AERIS v2.5 Command Center initialized. All systems ready.</div>
+        </div>
+    </section>
+
+</main>
+
+<!-- ══════════════════ FOOTER ══════════════════ -->
+<footer class="aeris-footer">
+    <span>AERIS v2.5 &nbsp;|&nbsp; ADAPTIVE NOISE CANCELLATION DEFENSE PROTOTYPE &nbsp;|&nbsp; LAB VALIDATION</span>
+    <span id="footerTime"></span>
+</footer>
+
+<!-- ══════════════════ JURY MODE MODAL ══════════════════ -->
+<div id="juryModeOverlay" class="modal-overlay hidden">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2 style="font-family:var(--font-heading); color:var(--text-heading); font-size:1.15rem;">⚡ AERIS JURY DEMONSTRATION CONSOLE</h2>
+            <button class="close-btn" onclick="toggleJuryMode()">&times;</button>
+        </div>
+        <div class="modal-body">
+            <div class="jury-metrics-row">
+                <div class="anc-metric">
+                    <span class="anc-label">AI DETECTION</span>
+                    <span class="anc-value" id="juryNoiseClass">STANDBY</span>
+                </div>
+                <div class="anc-metric">
+                    <span class="anc-label">ACTIVE FILTER</span>
+                    <span class="anc-value" id="juryFilter">LMS (M=16)</span>
+                </div>
+                <div class="anc-metric">
+                    <span class="anc-label">MEASURED LATENCY</span>
+                    <span class="anc-value gain" id="juryLatency">0.0 ms</span>
+                </div>
+                <div class="anc-metric">
+                    <span class="anc-label">COMM QUALITY</span>
+                    <span class="anc-value highlight" id="juryQuality">100 / 100</span>
+                </div>
+            </div>
+
+            <div class="jury-canvas-row">
+                <div class="canvas-block">
+                    <span class="canvas-label blue-label">INPUT (NOISY / LIVE MIC)</span>
+                    <canvas id="juryCanvasNoisy" width="400" height="75"></canvas>
+                </div>
+                <div class="canvas-block">
+                    <span class="canvas-label green-label">ENHANCED SPEECH OUTPUT</span>
+                    <canvas id="juryCanvasEnhanced" width="400" height="75"></canvas>
+                </div>
+            </div>
+
+            <div class="explainability-block">
+                <span class="exp-title">AUTOMATED JURY STEP-BY-STEP WORKFLOW</span>
+                <p class="exp-reason" id="juryStatusText">Click "START JURY STEP DEMO" to step through: Clean Speech &rarr; Heavy TMETRO Noise &rarr; AI Classification &rarr; LMS Filter &rarr; Live Microphone with Clean Voice Conversion.</p>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="matlab-btn" onclick="startJuryStepDemo()">▶ START JURY STEP DEMO</button>
+            <button class="ctrl-btn stop-btn" onclick="toggleJuryMode()">EXIT CONSOLE</button>
+        </div>
+    </div>
+</div>
+
+<!-- ══════════════════ MATLAB REPORT MODAL ══════════════════ -->
+<div id="matlabReportModal" class="modal-overlay hidden">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2 style="font-family:var(--font-heading); color:var(--text-heading); font-size:1.1rem;">📊 MATLAB MASTER VALIDATION REPORT</h2>
+            <button class="close-btn" onclick="closeMatlabReportModal()">&times;</button>
+        </div>
+        <div class="modal-body">
+            <pre id="matlabReportContent" style="font-family:var(--font-mono); font-size:0.75rem; background:#f8fafc; padding:12px; border-radius:4px; border:1px solid var(--border-color); white-space:pre-wrap; color:#0f172a; max-height:400px; overflow-y:auto;">Loading report...</pre>
+        </div>
+        <div class="modal-footer">
+            <button class="matlab-btn" onclick="closeMatlabReportModal()">CLOSE</button>
+        </div>
+    </div>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>

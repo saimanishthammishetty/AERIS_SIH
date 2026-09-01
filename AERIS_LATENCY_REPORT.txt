@@ -1,0 +1,33 @@
+=============================================================================
+PROJECT AERIS — LATENCY BENCHMARK & REAL-TIME PERFORMANCE REPORT
+Generated: 2026-08-30 17:39:03
+=============================================================================
+
+1. SYSTEM LATENCY OVERVIEW:
+-----------------------------------------------------------------------------
+Sampling Frequency         : 16000 Hz
+Frame Buffer Size          : 512 samples (32.00 ms audio block)
+Benchmark Sample Size      : 100 consecutive real-time iterations
+Total Average Latency      : 12.129 ms
+Minimum Measured Latency   : 6.110 ms
+Maximum Measured Latency   : 62.216 ms
+Standard Deviation         : 13.840 ms
+Dropped Frames Count       : 0 (0.00%)
+Real-Time Budget Margin    : 62.1% Available Headroom
+
+2. SUB-STAGE LATENCY MEASUREMENT BREAKDOWN:
+-----------------------------------------------------------------------------
+1. Audio Capture / Buffer      : 0.007 ms  (0.1%)
+2. 28 Acoustic Features DSP    : 0.918 ms (7.6%)
+3. AI Noise Classifier (RF)    : 5.104 ms   (42.1%)
+4. Adaptive LMS / NLMS Filter  : 6.014 ms  (49.6%)
+5. Output & Telemetry Metric   : 0.040 ms  (0.3%)
+-----------------------------------------------------------------------------
+TOTAL MEASURED LATENCY         : 12.129 ms  (100.0%)
+
+3. REAL-TIME FEASIBILITY VERDICT:
+-----------------------------------------------------------------------------
+PASS. Total processing latency of 12.129 ms is substantially below the
+32.00 ms audio frame duration, ensuring zero audio dropouts and deterministic
+real-time execution.
+=============================================================================

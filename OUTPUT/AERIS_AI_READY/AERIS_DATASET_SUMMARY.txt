@@ -1,0 +1,40 @@
+=============================================================================
+AERIS AI NOISE DATASET - STRUCTURAL AUDIT & SUMMARY REPORT
+Generated: 2026-08-30 17:17:55
+=============================================================================
+
+1. DATASET SOURCE METRICS:
+-----------------------------------------------------------------------------
+Dataset Root Directory : C:\Users\nuppe\Documents\MATLAB\AERIS_SIH\DATASET\NOISE
+Total Audio Files      : 16
+Sampling Rate Target   : 16000 Hz
+Frame Length           : 250 ms (4000 samples)
+Hop Size (Overlap)     : 125 ms (2000 samples, 50% overlap)
+Total Extracted Frames : 38384
+
+2. NOISE CLASS DISTRIBUTION:
+-----------------------------------------------------------------------------
+Number of Discovered Classes : 1
+Class Names                  : ['TMETRO']
+
+Sample Breakdown by Class:
+  - Class 'TMETRO': 38,384 frames across 16 audio files
+
+3. EXTRACTED ACOUSTIC FEATURES (26 Total):
+-----------------------------------------------------------------------------
+Time-Domain Features (7)    : RMS, Energy, ZeroCrossingRate, MeanAbs, StdDev, PeakAmplitude, CrestFactor
+Spectral Features (5)       : SpectralCentroid, SpectralBandwidth, SpectralRolloff, SpectralFlux, SpectralFlatness
+Statistical Features (1)    : Kurtosis
+Cepstral MFCC Features (13) : MFCC_1 to MFCC_13
+
+4. DATA LEAKAGE PREVENTION & SPLIT PROTOCOL:
+-----------------------------------------------------------------------------
+Audio frames from the same 'source_file' are tagged and must be grouped
+using GroupKFold / GroupShuffleSplit to prevent inter-frame data leakage
+between training and validation sets.
+
+5. MULTI-CLASS CLASSIFICATION READINESS ASSESSMENT:
+-----------------------------------------------------------------------------
+Single-Class Status: True
+Status Note: DATASET CONTAINS ONLY 1 NOISE CLASS (TMETRO). Multi-class supervised classifier requires at least 2 distinct noise classes.
+=============================================================================

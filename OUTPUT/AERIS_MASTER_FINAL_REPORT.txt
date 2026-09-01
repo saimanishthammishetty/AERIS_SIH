@@ -1,0 +1,44 @@
+AERIS MASTER FINAL REPORT
+=========================
+
+Base folder:
+C:\Users\nuppe\Documents\MATLAB\AERIS_SIH
+
+Clean files: 2703
+Noise files: 16
+Sampling rate: 16000 Hz
+Samples: 93680
+Duration: 5.86 seconds
+
+LMS order: 16
+LMS requested step size: 0.005000
+NLMS order: 32
+NLMS step size: 0.150000
+
+RESULTS
+=======
+
+Target SNR:    5.0 dB | Input:    5.00 dB | LMS:   17.55 dB | Improvement:   12.55 dB | NLMS:    2.35 dB | Improvement:   -2.65 dB
+Target SNR:    0.0 dB | Input:    0.00 dB | LMS:   15.13 dB | Improvement:   15.13 dB | NLMS:    2.35 dB | Improvement:    2.35 dB
+Target SNR:   -5.0 dB | Input:   -5.00 dB | LMS:   12.36 dB | Improvement:   17.36 dB | NLMS:    2.35 dB | Improvement:    7.35 dB
+Target SNR:  -10.0 dB | Input:  -10.00 dB | LMS:    9.25 dB | Improvement:   19.25 dB | NLMS:    2.35 dB | Improvement:   12.35 dB
+Target SNR:  -15.0 dB | Input:  -15.00 dB | LMS: UNSTABLE | NLMS:    2.35 dB | Improvement:   17.35 dB
+Target SNR:  -20.0 dB | Input:  -20.00 dB | LMS: UNSTABLE | NLMS:    2.34 dB | Improvement:   22.34 dB
+
+SUMMARY
+=======
+LMS average improvement: 16.07 dB
+LMS minimum improvement: 12.55 dB
+LMS maximum improvement: 19.25 dB
+
+NLMS average improvement: 9.85 dB
+NLMS minimum improvement: -2.65 dB
+NLMS maximum improvement: 22.34 dB
+
+BEST ALGORITHM: LMS
+BEST AVERAGE IMPROVEMENT: 16.07 dB
+
+AI STAGE READY
+===============
+AI-ready data folder:
+C:\Users\nuppe\Documents\MATLAB\AERIS_SIH\OUTPUT\AERIS_AI_READY

@@ -1,0 +1,13 @@
+AERIS LMS vs NLMS RESULTS
+=========================
+
+Sampling Rate : 16000 Hz
+Input SNR     : -10.0000 dB
+
+LMS Output SNR : 3.8467 dB
+LMS Improvement: 13.8467 dB
+LMS MSE        : 0.0004937583
+
+NLMS Output SNR : 0.3488 dB
+NLMS Improvement: 10.3488 dB
+NLMS MSE        : 0.0011048546
