@@ -1,5 +1,5 @@
 {
-  "name": "aeris-v2.5",
+  "name": "aeris",
   "version": "2.5.0",
   "description": "AERIS — Adaptive Noise Cancellation & Intelligent Communication System",
   "main": "FRONTEND/app.js",
@@ -13,10 +13,10 @@
     "dsp",
     "anc",
     "adaptive-filter",
-    "random-forest",
-    "fastapi",
-    "audio-worklet"
+    "tinyml",
+    "esp32",
+    "mpu6050",
+    "fastapi"
   ],
-  "author": "AERIS Development Team",
   "license": "MIT"
 }
